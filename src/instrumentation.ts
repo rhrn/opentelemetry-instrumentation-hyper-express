@@ -37,6 +37,7 @@ import type { HyperExpressInstrumentationConfig } from './types';
 import { SpanKind } from '@opentelemetry/api';
 
 const APM_TYPE = process.env.APM_TYPE;
+const SEMATTRS_HTTP_REQUEST_ID = 'http.x_request_id';
 
 export class HyperExpressInstrumentation extends InstrumentationBase {
   constructor(config: HyperExpressInstrumentationConfig = {}) {
@@ -212,6 +213,7 @@ export class HyperExpressInstrumentation extends InstrumentationBase {
           attributes[SEMATTRS_HTTP_TARGET] = route;
           attributes[SEMATTRS_HTTP_URL] = getScheme(req.app) + req.headers.host + req.url; 
           attributes[SEMATTRS_HTTP_CLIENT_IP] = req.ip;
+          attributes[SEMATTRS_HTTP_REQUEST_ID] = req.headers['x-request-id'];
         }
         const span = this.tracer.startSpan(
           spanName,
