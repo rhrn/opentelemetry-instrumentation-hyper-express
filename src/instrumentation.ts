@@ -244,7 +244,9 @@ export class HyperExpressInstrumentation extends InstrumentationBase {
         }
 
         const patchedNext = (err?: any) => {
-          span.end();
+          if (err) {
+            span.end();
+          }
           next(err);
         };
         // patchedNext.ifError = next.ifError; // todo: fix me
